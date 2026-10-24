@@ -5,7 +5,9 @@ const children = [
     ["--env-file-if-exists=.env", "--watch", "server/index.mjs"],
     { stdio: "inherit" },
   ),
-  spawn("npm", ["run", "dev:client"], { stdio: "inherit" }),
+  spawn(process.execPath, ["node_modules/vite/bin/vite.js", "--host", "127.0.0.1"], {
+    stdio: "inherit",
+  }),
 ];
 function close() {
   children.forEach((p) => p.kill("SIGTERM"));

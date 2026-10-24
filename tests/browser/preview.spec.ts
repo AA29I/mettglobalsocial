@@ -3,6 +3,8 @@ test("Vercel interface preview works without API calls or credentials", async ({
   page,
 }) => {
   const calls: string[] = [];
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
   page.on("request", (r) => {
     if (new URL(r.url()).pathname.startsWith("/api")) calls.push(r.url());
   });
@@ -55,6 +57,7 @@ test("Vercel interface preview works without API calls or credentials", async ({
     .getByRole("button", { name: "Create company", exact: true })
     .click();
   await page.getByRole("button", { name: "Overview", exact: true }).click();
+  await expect.poll(() => page.locator("aside.sidebar").evaluate(el => el.getBoundingClientRect().right)).toBeLessThanOrEqual(0);
   await expect(
     page.getByRole("button", { name: /Preview brand story/ }),
   ).toHaveCount(0);
@@ -64,6 +67,7 @@ test("Vercel interface preview works without API calls or credentials", async ({
     ),
   ).toBe(true);
   expect(calls).toEqual([]);
+  expect(errors).toEqual([]);
   await page.screenshot({
     path: "test-results/vercel-preview-mobile.png",
     fullPage: true,

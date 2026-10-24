@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "main": "desktop/main.mjs",
   "engines": {
     "node": ">=24.0.0"
   },
@@ -16,7 +17,11 @@
     "test:e2e": "playwright test",
     "build:vercel": "node scripts/build-vercel.mjs",
     "build:preview": "node scripts/build-preview.mjs",
+    "preview": "vite preview --outDir dist-preview --host 127.0.0.1 --port 4173 --strictPort",
     "test:preview": "playwright test -c playwright.preview.config.ts"
+    ,"desktop": "electron .",
+    "build:desktop": "node scripts/build-desktop.mjs",
+    "test:desktop": "node scripts/test-desktop.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.2.0",
@@ -31,6 +36,8 @@
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.4",
+    "electron": "^44.9.2",
+    "electron-builder": "^26.15.3",
     "prettier": "^3.9.10",
     "typescript": "^5.7.3",
     "vite": "^6.1.0"

@@ -33,7 +33,3 @@ Use test content and explicitly authorize the action before submitting it throug
 Repeat with an expired authorization, removed Drive access and an interrupted preparation request. Resume the stored job rather than creating a new upload. Inspect Studio for ambiguous or partially prepared private videos. Confirm there are no duplicate uploads and no change to the other company's content. Do not replace this procedure with mocked tests or UI screenshots.
 
 This version is a tested development build with a YouTube integration implementation pending live acceptance, not a finished all-platform Metricool replacement.
-
-## Database-free interface preview
-
-A separate build flag (`VITE_PREVIEW_MODE=true`) selects explicit browser-only storage and bypasses authentication without asking for passwords. Vercel builds this marked interface preview by default unless `APP_MODE=production` is configured. It does not call the server API, store OAuth credentials, or simulate successful connections or publication. A dedicated Chromium test covers preview startup, account/draft creation, persistence after reload, company separation on a phone viewport, and asserts that zero `/api` requests occur. This provides UI review evidence only.

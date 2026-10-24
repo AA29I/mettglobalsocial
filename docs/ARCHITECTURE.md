@@ -25,7 +25,3 @@ This preparation flow is not a general-purpose unattended worker. Closing the ta
 ## Release boundaries
 
 Before internal use: configure HTTPS origin, persistent database, setup token and encryption key; create platform developer apps; register callbacks; authorize actual test accounts; inspect real uploaded/scheduled results; test database backup/recovery and credential refresh. Before public use: memberships/RBAC, invitation onboarding, account recovery/MFA, audit retention, OAuth review, privacy/deletion policy, more substantial rate limiting and security review, accessibility/device checks, and published provider limitations.
-
-## Interface preview deployment
-
-The Vercel build defaults to a marked interface-preview mode. `src/preview.ts` stores non-secret planning data in browser localStorage, not a production database. It has no real authentication, account connections or publishing. Server-backed local builds remain the default for `npm run build`; a hosted server-backed build requires explicit `APP_MODE=production` and deployment prerequisites. This separates visual testing from live integration readiness without adding paid services.

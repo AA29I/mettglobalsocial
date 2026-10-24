@@ -9,3 +9,4 @@ test-results/
 *.tsbuildinfo
 
 dist-preview/
+release/

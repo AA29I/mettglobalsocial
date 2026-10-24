@@ -2,19 +2,6 @@
 
 Private social planning workspace for Mett Global. Responsive React interface, Express API, SQLite locally, and Neon PostgreSQL support for hosted deployment. The current monogram and palette are provisional pending official brand assets.
 
-## Try the interface on Vercel without a database
-
-Import `AA29I/mettglobalsocial` in Vercel, keep the repository root as the root directory, and deploy. `vercel.json` runs `npm run build:vercel`. With no `APP_MODE` set, this produces a clearly marked **browser-only interface preview**. It does not need Neon or social credentials. It allows company/account records, draft editing, cover preferences and planning; records stay only in that browser. It does not authenticate, connect accounts, sync between devices, or publish posts. Do not enter secrets or rely on it as your working production database.
-
-To enable the real server-backed version later, set `APP_MODE=production` and configure the secure variables in docs/DEPLOYMENT.md, then redeploy. Existing browser-preview data is not automatically migrated to the real database. Confirm hosting-plan eligibility for the intended company use separately; no paid upgrade is configured.
-
-Local preview validation:
-
-```sh
-npm run build:preview
-npm run test:preview
-```
-
 ## Run locally
 
 Requires Node.js 24+.
@@ -56,8 +43,6 @@ Prepared jobs cannot be edited/deleted through this app yet because doing so wou
 npm test
 npm run build
 npm run test:e2e
-npm run build:preview
-npm run test:preview
 ```
 
 Browser checks use system Chromium (`/usr/bin/chromium` by default). Set `CHROMIUM_PATH` to your Chromium executable or install the appropriate Playwright browser and adjust the config. Tests use temporary databases and test-only credentials, never your accounts. See [validation evidence](docs/VALIDATION.md).

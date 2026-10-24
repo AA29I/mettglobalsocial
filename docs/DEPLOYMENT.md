@@ -4,18 +4,12 @@
 
 Use the hosting provider's environment-variable/secret interface. No secret belongs in a `VITE_` variable, source code, screenshot, or Git commit. The application reports only missing configuration names. Developer apps are a one-time setup; thereafter users connect through each platform's official login.
 
-## Fast interface preview
-
-Use Vercel's New Project page to import `AA29I/mettglobalsocial`, root directory `.`, and deploy using the repository configuration. No environment variables are needed for this preview. The default `npm run build:vercel` builds the browser-only preview, marked prominently in the app. All data is local to the visitor's browser and account connections/publishing are disabled. This allows UI review without exposing a public owner-setup form or requiring a database. It is not a completed production deployment.
-
-Do not set `APP_MODE=production` until the database and security variables below exist. To convert the preview to a real server-backed application, set it along with all prerequisites and redeploy. Browser-only preview records are not synced or migrated automatically.
-
 ## Hosting prerequisites
 
 Choose a hosting plan that permits this company's intended use within its free allowance. The repository contains Vercel configuration, but Vercel Hobby commercial-use eligibility is not assumed. No authenticated Vercel connector or CLI session was available during development. A running production deployment has not been tested.
 
 1. Create a Neon project using its free plan and supply its PostgreSQL connection string as `DATABASE_URL` in hosting secrets. No value is stored in Git.
-2. Import this repository into an eligible Vercel project, or use a compatible Node.js 24 host. Vercel build: `npm run build:vercel` with `APP_MODE=production`, output: `dist`; `api/index.mjs` handles API routes. Confirm the project's Node runtime supports 24.
+2. Import this repository into an eligible Vercel project, or use a compatible Node.js 24 host. Vercel build: `npm run build`, output: `dist`; `api/index.mjs` handles API routes. Confirm the project's Node runtime supports 24.
 3. Set `APP_ORIGIN` to the exact canonical HTTPS application origin, without trailing slash. OAuth redirects, origin protection and cookies depend on it. Preview origins need their own configuration; arbitrary previews are intentionally not accepted.
 4. Set `SETUP_TOKEN` to a strong random value, and `TOKEN_ENCRYPTION_KEY` to base64 encoding of 32 cryptographically random bytes. Generate them privately with a trusted password manager or a local cryptographic tool. Never use example values in production.
 5. Set `COOKIE_SECURE=true` and `NODE_ENV=production`. On Vercel cookies are secure automatically. On a Node host set `HOST=0.0.0.0` and use the provider's assigned `PORT`.

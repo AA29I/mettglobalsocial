@@ -31,7 +31,11 @@ test("OAuth uses expiring one-time state and encrypts credentials without exposi
     assert.equal(u.hostname, "accounts.google.com");
     assert.equal(u.searchParams.get("code_challenge_method"), "S256");
     assert.equal(u.searchParams.get("access_type"), "offline");
+    assert.ok(u.searchParams.get("scope").split(" ").includes(
+      "https://www.googleapis.com/auth/youtube.force-ssl",
+    ), "native scheduling needs a videos.update-compatible scope");
     const state = u.searchParams.get("state");
+    const grantedScope = u.searchParams.get("scope");
     assert.equal(
       (await q("SELECT id FROM oauth_states"))[0].id.includes(state),
       false,
@@ -48,6 +52,7 @@ test("OAuth uses expiring one-time state and encrypts credentials without exposi
           access_token: "test-only-access-token",
           refresh_token: "test-only-refresh-token",
           expires_in: 3600,
+          scope: grantedScope,
         });
       if (u.pathname === "/drive/v3/about")
         return json({
@@ -80,6 +85,16 @@ test("OAuth uses expiring one-time state and encrypts credentials without exposi
     );
     const rows = await q("SELECT * FROM connections");
     assert.equal(rows.length, 2);
+    await service.googleAccess("company", rows[0].account_id, true);
+    const { encrypt } = await import("../server/connections.mjs");
+    const originalCredentials = rows[0].credentials;
+    await q("UPDATE connections SET credentials=$1 WHERE id=$2", [
+      encrypt({ ...decrypt(originalCredentials), scope: "https://www.googleapis.com/auth/youtube.upload" }), rows[0].id,
+    ]);
+    await assert.rejects(
+      () => service.googleAccess("company", rows[0].account_id, true), /Reconnect.*management/,
+    );
+    await q("UPDATE connections SET credentials=$1 WHERE id=$2", [originalCredentials, rows[0].id]);
     assert.ok(!JSON.stringify(rows).includes("test-only-access-token"));
     assert.equal(
       decrypt(rows[0].credentials).refresh_token,

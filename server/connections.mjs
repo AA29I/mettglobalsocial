@@ -198,7 +198,7 @@ export async function connections(q) {
     };
     const scopes = {
       google:
-        "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube.readonly",
+        "https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/youtube.force-ssl",
       meta: "pages_show_list,pages_read_engagement,pages_manage_posts,instagram_basic,instagram_content_publish",
       pinterest: "boards:read,pins:read,pins:write,user_accounts:read",
       tiktok: "user.info.basic,video.publish,video.upload",
@@ -380,7 +380,7 @@ export async function connections(q) {
     }
     return s.company_id;
   }
-  async function googleAccess(companyId, accountId) {
+  async function googleAccess(companyId, accountId, forPublishing = false) {
     const c = (
       await q(
         "SELECT * FROM connections WHERE company_id=$1 AND account_id=$2 AND provider=$3",
@@ -416,6 +416,15 @@ export async function connections(q) {
           c.id,
         ],
       );
+    }
+    if (forPublishing) {
+      const granted = new Set((tokens.scope || "").split(/\s+/));
+      if (!["youtube.force-ssl", "youtube", "youtubepartner"].some(
+        (scope) => granted.has("https://www.googleapis.com/auth/" + scope),
+      ))
+        throw new Error(
+          "Reconnect this Google account and grant YouTube management permission before preparing a schedule.",
+        );
     }
     return { token: tokens.access_token, externalId: c.external_id };
   }

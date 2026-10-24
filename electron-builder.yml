@@ -1,0 +1,22 @@
+appId: com.mettglobal.social
+productName: Mett Social
+asar: true
+directories:
+  output: release
+files:
+  - desktop/**
+  - server/**
+  - dist/**
+  - public/icon-512.png
+  - package.json
+  - "!.env*"
+  - "!.data/**"
+  - "!test-results/**"
+  - "!**/*.map"
+win:
+  target:
+    - target: portable
+      arch: [x64]
+  signAndEditExecutable: false
+portable:
+  artifactName: Mett-Social-${version}-Windows-x64.exe

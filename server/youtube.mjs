@@ -128,7 +128,7 @@ export async function youtube(q, integrations) {
     if (previous) return publicJob(previous);
     metadata(payload, accountId);
     const fileId = driveFileId(payload.mediaUrl);
-    const { token } = await integrations.googleAccess(companyId, accountId);
+    const { token } = await integrations.googleAccess(companyId, accountId, true);
     const file = await body(
       await request(
         "https://www.googleapis.com/drive/v3/files/" +
@@ -219,6 +219,7 @@ export async function youtube(q, integrations) {
       const { token, externalId } = await integrations.googleAccess(
         companyId,
         job.account_id,
+        true,
       );
       if (job.phase === "ready") {
         const video = metadata(payload, job.account_id);
